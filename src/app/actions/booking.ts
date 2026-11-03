@@ -142,7 +142,6 @@ export async function submitReview(_prev: ReviewState, form: FormData): Promise<
     .onConflictDoNothing()
     .returning({ id: schema.reviews.id });
   if (!inserted.length) return { errors: {}, formError: "You've already reviewed this booking." };
-  // No revalidatePath here: the form swaps to a focused confirmation in place; a fresh load shows the review.
-  revalidatePath(`/scouts`);
-  return { errors: {}, ok: true };
+  revalidatePath(`/bookings/${booking.id}`);
+  redirect(`/bookings/${booking.id}?reviewed=1`);
 }

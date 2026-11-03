@@ -7,6 +7,7 @@ import { formatMoney, feePercentLabel } from "@/lib/money";
 import { completeBooking } from "@/app/actions/booking";
 import { PaymentWatcher } from "@/components/PaymentWatcher";
 import { ReviewForm } from "@/components/ReviewForm";
+import { FocusOnMount } from "@/components/FocusOnMount";
 
 export const metadata: Metadata = { title: "Booking" };
 
@@ -106,6 +107,11 @@ export default async function BookingPage({ params, searchParams }: PageProps<"/
               <h2 id="review-heading">{review ? "Your review" : `Review ${firstName}`}</h2>
               {review ? (
                 <>
+                  {sp.reviewed === "1" && (
+                    <FocusOnMount>
+                      <p className="notice notice-success">Thank you. Your review of {firstName} is published.</p>
+                    </FocusOnMount>
+                  )}
                   <p>
                     You rated {firstName} {review.rating} out of 5.
                   </p>

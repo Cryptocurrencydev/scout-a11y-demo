@@ -130,7 +130,7 @@ test("keyboard-only: search to review", async ({ page, axe }) => {
   await page.keyboard.type("Inês answered every access question in detail and the route was fully step-free.");
   await tabTo(page, publish);
   await page.keyboard.press("Enter");
-  const thanks = page.getByText(/Your review of Inês is published/);
+  const thanks = page.locator("[role=status]", { hasText: "Your review of Inês is published" });
   await expect(thanks).toBeFocused();
   await axe("flow: review published");
   log("reviewed");
