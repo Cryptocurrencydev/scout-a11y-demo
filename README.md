@@ -12,6 +12,17 @@ Ramplight is a fictional brand; scouts, reviews and bookings are invented.
   MapLibre GL with OpenFreeMap tiles, Playwright + axe-core, Vitest
 - **Testing:** see [a11y/TESTING.md](a11y/TESTING.md); per-phase build times in [TIMELOG.md](TIMELOG.md)
 
+## Test results (2026-11-03)
+
+- **Unit + integration (Vitest):** 18/18 passing (money split, dates, signed webhook + idempotency,
+  real Stripe test-mode fee/transfer/scout-net checks).
+- **Playwright, local production build, 390px + desktop:** 107 passed, 3 skipped (the live-only pay
+  flow and the desktop-only 200% zoom check on mobile). **axe: 0 violations** across every page, both
+  themes and all key states. Zero console errors.
+- **Live (https://scout-a11y-demo.vercel.app):** keyboard-only flow from search to review, paying on
+  Stripe Checkout, **passes at 390px and desktop**. A full live rerun was cut short when Vercel's
+  Security Checkpoint started challenging the headless browser (bot protection, not an app failure).
+
 ## Try it
 
 1. **Find scouts** → pick Lisbon and *Wheelchair access*; the result count is announced as you filter.
