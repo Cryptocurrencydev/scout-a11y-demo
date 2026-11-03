@@ -1,0 +1,1 @@
+ALTER TABLE "scouts" ADD COLUMN "stripe_dashboard" text DEFAULT 'none' NOT NULL;

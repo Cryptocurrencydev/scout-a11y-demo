@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're offline · Ramplight</title>
+<style>
+  :root { --bg:#fbf7f0; --ink:#1c1b19; --brand:#0b5a52; --focus:#1c1b19; --halo:#ffd23f; }
+  @media (prefers-contrast: more) { :root { --bg:#000; --ink:#fff; --brand:#ffe14d; --focus:#ffe14d; --halo:#000; } }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size:1.0625rem; line-height:1.6; background:var(--bg); color:var(--ink); }
+  main { max-width: 40rem; margin: 0 auto; padding: 2rem 1rem; }
+  h1 { font-size: 2rem; line-height:1.2; }
+  a, button { color: var(--brand); }
+  button { font: inherit; font-weight:700; min-height:44px; padding: 0.5rem 1.1rem; border-radius:0.6rem; border:2px solid var(--brand); background: var(--brand); color: var(--bg); cursor:pointer; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 6px var(--halo); }
+</style>
+</head>
+<body>
+<main>
+  <h1>You're offline</h1>
+  <p>Ramplight can't reach the internet right now. Your messages and bookings are safe; nothing was lost.</p>
+  <p>When you're back online, try again.</p>
+  <button type="button" onclick="location.reload()">Try again</button>
+</main>
+</body>
+</html>
