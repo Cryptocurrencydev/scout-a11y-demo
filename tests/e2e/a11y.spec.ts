@@ -56,7 +56,10 @@ test.describe("axe: key interactive states", () => {
     await expect(page.locator(".pin").first()).toBeVisible();
     await page.waitForTimeout(1500);
     await axe("map view");
-    await page.getByRole("button", { name: /Show on map: Inês/ }).click();
+    const show = page.getByRole("button", { name: /Show on map: Inês/ });
+    await show.click();
+    await expect(show).toHaveAttribute("aria-pressed", "true");
+    await page.waitForTimeout(400); // let the 120ms colour transition finish before measuring contrast
     await axe("map view, scout selected");
   });
 
