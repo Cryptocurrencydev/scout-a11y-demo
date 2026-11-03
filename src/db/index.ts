@@ -15,9 +15,7 @@ export const pool =
   new Pool({
     connectionString: connectionString(),
     max: process.env.VERCEL ? 3 : 10,
-    ssl: /sslmode=require|neon\.tech/.test(process.env.DATABASE_URL ?? "")
-      ? { rejectUnauthorized: false }
-      : undefined,
+    // TLS comes from the URL (Neon: sslmode=require, verified against public CAs).
   });
 if (process.env.NODE_ENV !== "production") globalForDb.__scoutPool = pool;
 
