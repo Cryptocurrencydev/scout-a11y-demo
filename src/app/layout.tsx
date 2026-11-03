@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { Atkinson_Hyperlegible_Next } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { RouteFocus } from "@/components/RouteFocus";
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </footer>
         <RouteFocus />
         <ServiceWorker />
+        <Analytics />
       </body>
     </html>
   );
