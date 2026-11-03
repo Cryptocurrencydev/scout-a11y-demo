@@ -54,6 +54,7 @@ export function SearchExperience({
   const [selected, setSelected] = useState<string | null>(null);
   const [mapMessage, setMapMessage] = useState("");
   const resultsHeading = useRef<HTMLHeadingElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const initialQs = toQuery(initial);
   useEffect(() => {
@@ -61,6 +62,23 @@ export function SearchExperience({
     if (!pending) setFilters(initial);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQs, pending]);
+
+  useEffect(() => {
+    // Progressive enhancement: if someone changed a filter before JavaScript loaded, the native
+    // form already holds their choice. Pick it up instead of letting hydration reset it.
+    const form = formRef.current;
+    if (!form) return;
+    const fd = new FormData(form);
+    const fromDom: Filters = {
+      destination: String(fd.get("destination") ?? ""),
+      specialties: fd.getAll("specialty").map(String),
+      language: String(fd.get("language") ?? ""),
+      maxPrice: String(fd.get("maxPrice") ?? ""),
+      minRating: String(fd.get("minRating") ?? ""),
+    };
+    if (toQuery(fromDom) !== toQuery(initial)) apply(fromDom);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // Desktop: filters start expanded and the map is shown alongside the list.
@@ -108,6 +126,7 @@ export function SearchExperience({
   return (
     <div className="search-layout">
       <form
+        ref={formRef}
         className="card"
         role="search"
         aria-label="Scouts"
