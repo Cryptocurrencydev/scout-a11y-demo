@@ -121,15 +121,26 @@ test.describe("keyboard support", () => {
     const summary = dialog.locator(".error-summary");
     await expect(summary).toBeFocused();
     await expect(summary).toContainText("There are 2 problems");
-    const date = dialog.getByLabel("Trip date");
-    await expect(date).toHaveAttribute("aria-invalid", "true");
-    const describedBy = (await date.getAttribute("aria-describedby"))!.split(" ");
+    const day = dialog.getByLabel("Day");
+    await expect(day).toHaveAttribute("aria-invalid", "true");
+    const group = dialog.getByRole("group", { name: "Trip date" });
+    const describedBy = (await group.getAttribute("aria-describedby"))!.split(" ");
     const errorId = describedBy.find((d) => d.endsWith("-error"))!;
     await expect(dialog.locator(`[id="${errorId}"]`)).toContainText("Enter the date of your trip");
     // Error link moves focus to the field.
     await tabTo(page, summary.getByRole("link", { name: "Enter the date of your trip" }));
     await page.keyboard.press("Enter");
-    await expect(date).toBeFocused();
+    await expect(day).toBeFocused();
+    // An impossible date gets a specific message.
+    await page.keyboard.type("31");
+    await tabTo(page, dialog.getByLabel("Month"));
+    await page.keyboard.type("2");
+    await tabTo(page, dialog.getByLabel("Year"));
+    await page.keyboard.type("2027");
+    await tabTo(page, dialog.getByRole("button", { name: /Continue to payment/ }));
+    await page.keyboard.press("Enter");
+    await expect(summary).toBeFocused();
+    await expect(summary).toContainText("Trip date must be a real date");
   });
 
   test("route change moves focus to the new page heading", async ({ page }) => {

@@ -1077,3 +1077,22 @@ th.num {
     color: MarkText;
   }
 }
+
+/* GOV.UK-style date input: separate, labelled day / month / year fields. */
+.date-parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.date-parts .field {
+  margin: 0;
+}
+.date-parts input.w-2 {
+  width: 4.5rem;
+}
+.date-parts input.w-4 {
+  width: 6.5rem;
+}
+.date-input legend {
+  font-weight: 700;
+}

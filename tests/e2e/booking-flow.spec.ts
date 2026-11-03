@@ -62,8 +62,12 @@ test("keyboard-only: search to review", async ({ page, axe }) => {
   await tabTo(page, book, { max: 120 });
   await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog");
-  await tabTo(page, dialog.getByLabel("Trip date"));
-  await page.keyboard.type("06152027");
+  await tabTo(page, dialog.getByLabel("Day"));
+  await page.keyboard.type("15");
+  await tabTo(page, dialog.getByLabel("Month"));
+  await page.keyboard.type("6");
+  await tabTo(page, dialog.getByLabel("Year"));
+  await page.keyboard.type("2027");
   await tabTo(page, dialog.getByLabel("Your access needs"));
   await page.keyboard.type("Power wheelchair, 70 cm wide. I can't manage any steps.");
   await axe("flow: booking dialog filled");
@@ -122,7 +126,7 @@ test("keyboard-only: search to review", async ({ page, axe }) => {
   await page.keyboard.press("Space");
   await tabTo(page, page.getByLabel("Name shown on your review"));
   await page.keyboard.type("Keyboard K.");
-  await tabTo(page, page.getByLabel("Your review"));
+  await tabTo(page, page.getByLabel("Your review", { exact: true }));
   await page.keyboard.type("Inês answered every access question in detail and the route was fully step-free.");
   await tabTo(page, publish);
   await page.keyboard.press("Enter");

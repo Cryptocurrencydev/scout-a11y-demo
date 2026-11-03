@@ -9,12 +9,13 @@ import { ensureTraveler, travelerId } from "@/lib/traveler";
 import { splitPayment } from "@/lib/money";
 import { stripe, CURRENCY, siteUrl } from "@/lib/stripe";
 import { checkoutParams } from "@/lib/checkout";
+import { composeDate } from "@/lib/dates";
 
 export type CheckoutState = { errors: Record<string, string>; formError?: string };
 
 const BookingInput = z.object({
   packageId: z.uuid(),
-  tripDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Enter the date of your trip"),
+  tripDate: z.string({ message: "Enter the date of your trip" }).regex(/^\d{4}-\d{2}-\d{2}$/, "Trip date must be a real date, like 15 6 2027"),
   accessNotes: z.string().trim().min(10, "Access needs must be at least 10 characters").max(2000),
 });
 
@@ -26,7 +27,9 @@ async function origin() {
 }
 
 export async function startCheckout(_prev: CheckoutState, form: FormData): Promise<CheckoutState> {
-  const parsed = BookingInput.safeParse(Object.fromEntries(form));
+  const raw = Object.fromEntries(form) as Record<string, string>;
+  const tripDate = composeDate(raw.tripDay ?? "", raw.tripMonth ?? "", raw.tripYear ?? "") ?? undefined;
+  const parsed = BookingInput.safeParse({ ...raw, tripDate });
   if (!parsed.success) {
     const errors: Record<string, string> = {};
     for (const issue of parsed.error.issues) errors[String(issue.path[0])] ??= issue.message;
@@ -139,6 +142,7 @@ export async function submitReview(_prev: ReviewState, form: FormData): Promise<
     .onConflictDoNothing()
     .returning({ id: schema.reviews.id });
   if (!inserted.length) return { errors: {}, formError: "You've already reviewed this booking." };
-  revalidatePath(`/bookings/${booking.id}`);
+  // No revalidatePath here: the form swaps to a focused confirmation in place; a fresh load shows the review.
+  revalidatePath(`/scouts`);
   return { errors: {}, ok: true };
 }
